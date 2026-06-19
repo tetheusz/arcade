@@ -21,34 +21,35 @@ export function parseMilestonesJson(raw: string | null | undefined): MissionMile
       return [];
     }
 
-    return parsed
-      .map((entry, index) => {
-        if (typeof entry !== "object" || entry === null) {
-          return null;
-        }
+    const milestones: MissionMilestoneInput[] = [];
 
-        const item = entry as Record<string, unknown>;
-        const title = String(item.title ?? "").trim();
+    for (const entry of parsed) {
+      if (typeof entry !== "object" || entry === null) {
+        continue;
+      }
 
-        if (!title) {
-          return null;
-        }
+      const item = entry as Record<string, unknown>;
+      const title = String(item.title ?? "").trim();
 
-        const reputationReward = Number(item.reputationReward ?? 0);
-        const rewardUsdcRaw = String(item.rewardUsdc ?? "").trim();
+      if (!title) {
+        continue;
+      }
 
-        return {
-          id: typeof item.id === "string" ? item.id : undefined,
-          title,
-          description: String(item.description ?? "").trim() || undefined,
-          reputationReward: Number.isFinite(reputationReward)
-            ? Math.max(0, Math.min(10_000, Math.round(reputationReward)))
-            : 0,
-          rewardUsdc: rewardUsdcRaw || undefined,
-        } satisfies MissionMilestoneInput;
-      })
-      .filter((entry): entry is MissionMilestoneInput => entry !== null)
-      .slice(0, 12);
+      const reputationReward = Number(item.reputationReward ?? 0);
+      const rewardUsdcRaw = String(item.rewardUsdc ?? "").trim();
+
+      milestones.push({
+        ...(typeof item.id === "string" ? { id: item.id } : {}),
+        title,
+        description: String(item.description ?? "").trim() || undefined,
+        reputationReward: Number.isFinite(reputationReward)
+          ? Math.max(0, Math.min(10_000, Math.round(reputationReward)))
+          : 0,
+        rewardUsdc: rewardUsdcRaw || undefined,
+      });
+    }
+
+    return milestones.slice(0, 12);
   } catch {
     return [];
   }

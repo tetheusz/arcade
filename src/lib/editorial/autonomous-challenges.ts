@@ -1,4 +1,4 @@
-import type { ChallengeCategory, PrismaClient } from "@prisma/client";
+import type { ChallengeCategory, Prisma, PrismaClient } from "@prisma/client";
 import {
   generateDailyChallenges,
   selectChallengeTheme,
@@ -194,7 +194,7 @@ export async function runAutonomousChallengeGeneration(
           basePoints: challenge.basePoints,
           sourceLabel: "auto-generated",
           status: "DRAFT",
-          payload: challenge.payload,
+          payload: challenge.payload as Prisma.InputJsonValue,
         },
         create: {
           dateKey,
@@ -211,7 +211,7 @@ export async function runAutonomousChallengeGeneration(
           basePoints: challenge.basePoints,
           sourceLabel: "auto-generated",
           status: "DRAFT",
-          payload: challenge.payload,
+          payload: challenge.payload as Prisma.InputJsonValue,
         },
         select: {
           id: true,
