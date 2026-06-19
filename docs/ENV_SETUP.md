@@ -97,7 +97,7 @@ OPENAI_TRANSLATION_MODEL="gpt-4o-mini"
 X_BEARER_TOKEN="..."               # Posts automáticos no X
 ```
 
-**Cron editorial (a cada 12h, UTC):** `POST /api/cron/publish-translation` — roda tradução de docs Arc **e** geração de desafios diários (ambos como rascunho). Schedule em `vercel.json`: `0 */12 * * *` (00:00 e 12:00 UTC).
+**Cron editorial (a cada 24h, UTC):** `POST /api/cron/publish-translation` — roda tradução de docs Arc **e** geração de desafios diários (ambos como rascunho). Schedule em `vercel.json`: `0 0 * * *` (00:00 UTC, uma vez por dia).
 
 Teste local:
 

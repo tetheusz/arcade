@@ -6,7 +6,7 @@ export const aiLabStatus = {
   generator: hasOpenAIKey ? "openai-configured" : "not-connected",
   validation: "manual-review",
   note: hasOpenAIKey
-    ? "OpenAI configurado. O cron editorial (12h) traduz docs Arc e gera desafios diarios como rascunhos para revisao no admin."
+    ? "OpenAI configurado. O cron editorial (24h) traduz docs Arc e gera desafios diarios como rascunhos para revisao no admin."
     : "Configure OPENAI_API_KEY para traducoes e desafios automaticos do hub Arc.",
   capabilities: hasOpenAIKey
     ? [

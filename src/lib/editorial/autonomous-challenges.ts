@@ -5,7 +5,7 @@ import {
 } from "@/lib/editorial/generate-challenges";
 import { normalizeAnswer, getDateKey, shiftDateKey } from "@/lib/utils";
 
-const RECENT_DRAFT_WINDOW_MS = 11 * 60 * 60 * 1000;
+const RECENT_DRAFT_WINDOW_MS = 23 * 60 * 60 * 1000;
 const ALL_CATEGORIES: ChallengeCategory[] = ["WORD", "CONNECTION", "SECURITY"];
 
 export type AutonomousChallengeResult =

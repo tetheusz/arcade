@@ -42,7 +42,7 @@ git push origin main
 Ou conecte o repo na Vercel e faça deploy. O `vercel.json` registra o cron:
 
 - **Path:** `/api/cron/publish-translation`
-- **Schedule:** `0 */12 * * *` (12h em UTC)
+- **Schedule:** `0 0 * * *` (24h em UTC — 00:00 todo dia)
 
 Cada execução:
 1. Traduz 1 artigo do hub Arc → rascunho de post

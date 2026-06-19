@@ -22,7 +22,7 @@ type EditorialQueueItem = {
 };
 
 const LLMS_URL = "https://docs.arc.network/llms.txt";
-const RECENT_DRAFT_WINDOW_MS = 11 * 60 * 60 * 1000;
+const RECENT_DRAFT_WINDOW_MS = 23 * 60 * 60 * 1000;
 
 export function normalizeArcDocUrl(url: string) {
   return url
