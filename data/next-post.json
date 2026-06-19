@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-06-18T09:00:14.563Z",
+  "preferredKind": "translation",
+  "selected": {
+    "slug": "bridge-usdc-to-arc-traducao-pt-br",
+    "kind": "translation",
+    "title": "Bridge USDC to Arc",
+    "sourceUrl": "https://docs.arc.network/arc/tutorials/bridge-usdc-to-arc",
+    "notes": "Traduzir o tutorial oficial de bridge de USDC para Arc com Across."
+  },
+  "pendingCount": 4,
+  "readyForAction": false,
+  "readyReason": "translation-review-required",
+  "draftPath": null
+}

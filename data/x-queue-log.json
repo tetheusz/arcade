@@ -1,0 +1,62 @@
+[
+  {
+    "id": "post:bridge-usdc-to-arc-traducao-pt-br",
+    "text": "Nova tradução no Arcade:\n\nBridge USDC to Arc\n\nLearn how to bridge USDC to Arc via CCTP with Bridge Kit\n\nLeia aqui: https://arcade-nu-blush.vercel.app/posts/bridge-usdc-to-arc-traducao-pt-br",
+    "postedAt": "2026-04-29T09:10:13.166Z",
+    "mode": "web"
+  },
+  {
+    "id": "post:o-que-mudou-no-meu-entendimento-depois-do-primeiro-deploy",
+    "text": "Novo artigo no Arcade:\n\nO que mudou no meu entendimento depois do primeiro deploy no Arc\n\nArtigo autoral curto ligando o tutorial de deploy ao que realmente importa par…\n\nLeia aqui: https://arcade-nu-blush.vercel.app/posts/o-que-mudou-no-meu-entendimento-depois-do-primeiro-deploy",
+    "postedAt": "2026-04-27T09:10:13.460Z",
+    "mode": "web"
+  },
+  {
+    "id": "post:system-overview-traducao-pt-br",
+    "text": "Nova tradução no Arcade:\n\nSystem Overview\n\nArc&#x27;s system architecture integrates the Malachite consensus layer with the Reth execution layer to process and finalize transactions.\n\nLeia aqui: https://arcade-nu-blush.vercel.app/posts/system-overview-traducao-pt-br",
+    "postedAt": "2026-04-26T09:10:12.565Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-07",
+    "text": "Quando uma rede ainda está cedo, contexto vale muito. É por isso que estou tratando o Arcade como arquivo vivo de aprendizado, tradução e prática contínua em cima do Arc.",
+    "postedAt": "2026-04-25T09:10:13.583Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-06",
+    "text": "Estou usando o Arcade para documentar Arc em português, mas a meta é maior: criar um lugar onde conteúdo, jogo e repetição diária realmente acelerem a entrada de novos builders.",
+    "postedAt": "2026-04-21T09:10:13.397Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-05",
+    "text": "Todo ecossistema precisa de duas coisas ao mesmo tempo: builders produzindo e gente aprendendo em público. O Arcade está sendo construído exatamente nessa interseção.",
+    "postedAt": "2026-04-20T09:10:13.158Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-04",
+    "text": "O Arcade não é só um blog. A ideia é virar uma camada de contexto, skill e engajamento para quem quer buildar no Arc com mais clareza e consistência.",
+    "postedAt": "2026-04-19T09:10:17.300Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-03",
+    "text": "Uma coisa que me chama atenção no Arc: pensar taxas em USDC muda a forma de desenhar UX para apps financeiros. No Arcade eu quero transformar esse tipo de insight em rotina diária.",
+    "postedAt": "2026-04-18T09:10:13.380Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-02",
+    "text": "Minha tese com o Arcade é simples: builder aprende mais rápido quando mistura leitura, prática e repetição diária. É isso que eu quero testar ao redor do ecossistema Arc.",
+    "postedAt": "2026-04-17T13:36:47.548Z",
+    "mode": "web"
+  },
+  {
+    "id": "arcade-tese-01",
+    "text": "O Arcade nasceu para transformar estudo em hábito: conteúdo em PT-BR, desafios diários e sinais reais de participação para quem quer acompanhar o ecossistema Arc mais cedo.",
+    "postedAt": "2026-04-16T22:31:48.290Z",
+    "mode": "web"
+  }
+]

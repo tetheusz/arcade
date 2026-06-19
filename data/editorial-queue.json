@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "system-overview-traducao-pt-br",
+    "kind": "translation",
+    "title": "System Overview",
+    "sourceUrl": "https://docs.arc.network/arc/concepts/system-overview",
+    "notes": "Traduzir a visão geral técnica da rede com foco em arquitetura, taxas em USDC e finalidade determinística."
+  },
+  {
+    "slug": "bridge-usdc-to-arc-traducao-pt-br",
+    "kind": "translation",
+    "title": "Bridge USDC to Arc",
+    "sourceUrl": "https://docs.arc.network/arc/tutorials/bridge-usdc-to-arc",
+    "notes": "Traduzir o tutorial oficial de bridge de USDC para Arc com Across."
+  },
+  {
+    "slug": "deploy-on-arc-traducao-pt-br",
+    "kind": "translation",
+    "title": "Deploy on Arc",
+    "sourceUrl": "https://docs.arc.network/arc/tutorials/deploy-on-arc",
+    "notes": "Traduzir o quickstart oficial de deploy na Arc Testnet."
+  },
+  {
+    "slug": "access-usdc-crosschain-traducao-pt-br",
+    "kind": "translation",
+    "title": "Access USDC crosschain",
+    "sourceUrl": "https://docs.arc.network/arc/tutorials/access-usdc-crosschain",
+    "notes": "Traduzir o tutorial de USDC crosschain via CCTP e Bridge Kit."
+  },
+  {
+    "slug": "gas-and-fees-traducao-pt-br",
+    "kind": "translation",
+    "title": "Gas and Fees",
+    "sourceUrl": "https://docs.arc.network/arc/references/gas-and-fees",
+    "notes": "Traduzir a referência de taxas em USDC e modelo de gas do Arc."
+  },
+  {
+    "slug": "deterministic-finality-traducao-pt-br",
+    "kind": "translation",
+    "title": "Deterministic Finality",
+    "sourceUrl": "https://docs.arc.network/arc/concepts/deterministic-finality",
+    "notes": "Traduzir o conceito de finalidade determinística sub-segundo."
+  },
+  {
+    "slug": "register-your-first-ai-agent-traducao-pt-br",
+    "kind": "translation",
+    "title": "Register an AI Agent",
+    "sourceUrl": "https://docs.arc.network/arc/tutorials/register-your-first-ai-agent",
+    "notes": "Traduzir o tutorial de identidade on-chain ERC-8004 para agents."
+  },
+  {
+    "slug": "evm-compatibility-traducao-pt-br",
+    "kind": "translation",
+    "title": "EVM Compatibility",
+    "sourceUrl": "https://docs.arc.network/arc/references/evm-differences",
+    "notes": "Traduzir a referência oficial sobre diferenças EVM relevantes para builders."
+  },
+  {
+    "slug": "contract-addresses-traducao-pt-br",
+    "kind": "translation",
+    "title": "Contract Addresses",
+    "sourceUrl": "https://docs.arc.network/arc/references/contract-addresses",
+    "notes": "Traduzir a referência de endereços oficiais úteis para integração."
+  },
+  {
+    "slug": "o-que-mudou-no-meu-entendimento-depois-do-primeiro-deploy",
+    "kind": "article",
+    "title": "O que mudou no meu entendimento depois do primeiro deploy no Arc",
+    "sourceUrl": null,
+    "notes": "Artigo autoral curto ligando o tutorial de deploy ao que realmente importa para builders brasileiros."
+  },
+  {
+    "slug": "como-eu-usaria-o-arcade-para-aprender-arc-mais-rapido",
+    "kind": "article",
+    "title": "Como eu usaria o Arcade para aprender Arc mais rápido",
+    "sourceUrl": null,
+    "notes": "Artigo autoral sobre usar conteúdo + desafios diários como trilha de aprendizado."
+  }
+]

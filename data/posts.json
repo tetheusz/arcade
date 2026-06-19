@@ -1,0 +1,36 @@
+[
+  {
+    "id": "c6d7c050-54b4-4fc4-8ce1-70d1c8414b7e",
+    "slug": "teste",
+    "title": "teste",
+    "summary": "tetesssssssss",
+    "content": "testetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetestetesteteste",
+    "kind": "article",
+    "sourceTitle": null,
+    "sourceUrl": null,
+    "status": "draft",
+    "tags": [
+      "testtet"
+    ],
+    "publishedAt": null,
+    "updatedAt": "2026-04-08T01:52:57.952Z"
+  },
+  {
+    "id": "seed-welcome-to-arc",
+    "slug": "bem-vindo-ao-arc-builder-journal",
+    "title": "Bem-vindo ao Arcade Journal",
+    "summary": "A base editorial do Arcade para documentar o ecossistema Arc em português, com curadoria, traduções e artigos para builders brasileiros.",
+    "content": "# Começo do arquivo\n\nEste espaço nasceu para virar uma base viva de conteúdo sobre o ecossistema Arc para builders brasileiros.\n\n## O que você vai encontrar aqui\n\n- resumos de docs em PT-BR\n- guias práticos de onboarding\n- notas de pesquisa sobre builders e infraestrutura\n- ideias de apps e tools\n- recaps semanais do grind\n\n## Como este arquivo vai crescer\n\nA proposta do Arcade é simples:\n\n1. estudar um conceito\n2. transformar isso em conteúdo público\n3. construir algo útil em cima\n4. repetir até ganhar consistência\n\nEste primeiro mês é sobre contexto, repertório e base. Depois, a ideia é evoluir para analytics, mini apps e ativos mais profundos para o ecossistema.",
+    "kind": "article",
+    "sourceTitle": null,
+    "sourceUrl": null,
+    "status": "published",
+    "tags": [
+      "arc",
+      "pt-br",
+      "builder-journal"
+    ],
+    "publishedAt": "2026-04-07T12:00:00.000Z",
+    "updatedAt": "2026-04-07T12:00:00.000Z"
+  }
+]

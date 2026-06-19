@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/publish-translation",
+      "schedule": "0 */12 * * *"
+    }
+  ]
+}

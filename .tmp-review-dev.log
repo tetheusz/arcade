@@ -1,0 +1,30 @@
+
+> arc-builder-journal@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://26.51.243.210:3000
+- Environments: .env
+✓ Ready in 470ms
+
+ GET /jogar 307 in 201ms (next.js: 105ms, application-code: 96ms)
+ GET / 200 in 2.4s (next.js: 241ms, application-code: 2.2s)
+ GET /posts/o-que-e-arc-para-builders-br 200 in 2.8s (next.js: 631ms, application-code: 2.2s)
+ GET /posts/bem-vindo-ao-arc-traducao-pt-br 200 in 2.6s (next.js: 451ms, application-code: 2.2s)
+ GET /jogar 307 in 47ms (next.js: 3ms, application-code: 44ms)
+ GET /entrar?next=%2Fjogar 200 in 96ms (next.js: 29ms, application-code: 67ms)
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://26.51.243.210:3000
+- Environments: .env
+✓ Ready in 425ms
+
+ GET /api/activity/export 401 in 656ms (next.js: 626ms, application-code: 30ms)
+ GET /api/ai/status 403 in 362ms (next.js: 352ms, application-code: 10ms)
+ POST /api/challenges/test/submit 401 in 876ms (next.js: 866ms, application-code: 10ms)
+ GET / 200 in 2.5s (next.js: 275ms, application-code: 2.2s)
+ OPTIONS /api/activity/export 204 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET / 200 in 257ms (next.js: 4ms, application-code: 252ms)
+ OPTIONS /api/activity/export 204 in 5ms (next.js: 1804µs, application-code: 3ms)
+[?25h

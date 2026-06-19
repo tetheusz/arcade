@@ -1,0 +1,38 @@
+[
+  {
+    "id": "deploy-on-arc",
+    "title": "Deploy on Arc",
+    "topic": "Foundry, forge, cast, anvil, deploy de contratos na Arc Testnet, USDC como gas",
+    "priority": 100
+  },
+  {
+    "id": "usdc-gas",
+    "title": "USDC as gas",
+    "topic": "Taxas em USDC, stable fee design, gas and fees na Arc",
+    "priority": 95
+  },
+  {
+    "id": "cctp-bridge",
+    "title": "CCTP and Bridge Kit",
+    "topic": "Bridge USDC crosschain, CCTP, Bridge Kit, App Kit",
+    "priority": 90
+  },
+  {
+    "id": "evm-differences",
+    "title": "EVM on Arc",
+    "topic": "Compatibilidade EVM, tx.origin vs msg.sender, finalidade deterministica",
+    "priority": 85
+  },
+  {
+    "id": "ai-agents",
+    "title": "AI agents on Arc",
+    "topic": "ERC-8004, ERC-8183, agentic economy, registro de agents",
+    "priority": 80
+  },
+  {
+    "id": "architecture",
+    "title": "Arc architecture",
+    "topic": "Malachite, Reth, system overview, sub-second finality",
+    "priority": 75
+  }
+]

@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+!.env.postgres.example
+.next
+node_modules
+artifacts
+cache
+.tmp*
+data/*.db
+data/*.db-*

@@ -1,0 +1,558 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Auth (Better Auth) ─────────────────────────────────────────────────────
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          UserRole  @default(CONTRIBUTOR)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  profile       UserProfile?
+  attempts      ChallengeAttempt[]
+  activities    ActivityEvent[]
+  submissions   Submission[]
+  reviews       Review[]           @relation("ReviewerReviews")
+  milestoneClaims MilestoneClaim[] @relation("MilestoneClaimUser")
+  reviewedMilestoneClaims MilestoneClaim[] @relation("MilestoneClaimReviewer")
+  protocolAdmin ProtocolAdmin?
+  protocolApps  ProtocolApplication[]
+  userBadges    UserBadge[]
+  reputationEvents ReputationEvent[]
+  payouts       Payout[]
+  walletAddresses WalletAddress[]
+
+  @@unique([email])
+  @@map("users")
+}
+
+model WalletAddress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  address   String
+  chainId   Int
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([address, chainId])
+  @@map("wallet_addresses")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+// ─── Journal ────────────────────────────────────────────────────────────────
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PostKind {
+  ARTICLE
+  TRANSLATION
+}
+
+model Post {
+  id            String     @id @default(cuid())
+  slug          String     @unique
+  title         String
+  summary       String
+  content       String
+  kind          PostKind   @default(ARTICLE)
+  coverImageUrl String?
+  sourceTitle   String?
+  sourceUrl     String?
+  status        PostStatus @default(DRAFT)
+  tags          String     @default("")
+  displayOrder  Int        @default(0)
+  featured      Boolean    @default(false)
+  publishedAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("posts")
+  @@index([kind, publishedAt(sort: Desc)])
+  @@index([status, updatedAt(sort: Desc)])
+  @@index([publishedAt(sort: Desc)])
+  @@index([status, featured, displayOrder])
+}
+
+// ─── Games / Reputation ─────────────────────────────────────────────────────
+
+enum ChallengeCategory {
+  WORD
+  CONNECTION
+  SECURITY
+}
+
+enum ChallengeStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model UserProfile {
+  userId            String       @id
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug              String       @unique
+  displayName       String?
+  avatarUrl         String?
+  bio               String?
+  totalPoints       Int          @default(0)
+  reputationScore   Int          @default(0)
+  xp                Int          @default(0)
+  currentStreak     Int          @default(0)
+  longestStreak     Int          @default(0)
+  solvedChallenges  Int          @default(0)
+  lastActiveDateKey String?
+  chosenArchetype   ArchetypeClass?
+  skills            String?
+  region            String?
+  links             String?
+  walletId          String?
+  walletAddress     String?      @unique
+  walletState       WalletState  @default(PENDING)
+  sbtTokenId        Int?
+  erc8004AgentId    String?
+  usdcEarned        String       @default("0")
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@map("user_profiles")
+  @@index([totalPoints(sort: Desc)])
+  @@index([reputationScore(sort: Desc)])
+  @@index([xp(sort: Desc)])
+  @@index([walletAddress])
+}
+
+model DailyChallenge {
+  id               String             @id @default(cuid())
+  dateKey          String
+  category         ChallengeCategory
+  title            String
+  teaser           String
+  prompt           String
+  instructions     String?
+  answer           String
+  answerNormalized String
+  explanation      String?
+  hint             String?
+  payload          Json?
+  difficulty       Int                @default(1)
+  basePoints       Int                @default(10)
+  sourceLabel      String             @default("manual")
+  status           ChallengeStatus    @default(PUBLISHED)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  attempts         ChallengeAttempt[]
+
+  @@map("daily_challenges")
+  @@unique([dateKey, category])
+  @@index([dateKey, status])
+}
+
+model ChallengeAttempt {
+  id            String         @id @default(cuid())
+  userId        String
+  challengeId   String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge     DailyChallenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  attemptsCount Int            @default(0)
+  lastAnswer    String?
+  isSolved      Boolean        @default(false)
+  pointsAwarded Int            @default(0)
+  solvedAt      DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@map("challenge_attempts")
+  @@unique([userId, challengeId])
+  @@index([challengeId, isSolved])
+}
+
+model ActivityEvent {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         String
+  dateKey      String
+  points       Int      @default(0)
+  referenceId  String?
+  referenceKey String?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@map("activity_events")
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([dateKey, type])
+}
+
+// ─── Bounties / arcTalent domain ────────────────────────────────────────────
+
+enum UserRole {
+  CONTRIBUTOR
+  ADMIN
+}
+
+enum ArchetypeClass {
+  DEVELOPER
+  SENTINEL
+  CREATOR
+  SCHOLAR
+  ARCHITECT
+}
+
+enum WalletState {
+  PENDING
+  ACTIVE
+  FAILED
+}
+
+enum ProtocolApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MissionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MissionDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EscrowStatus {
+  NONE
+  OPEN
+  FUNDED
+  SUBMITTED
+  COMPLETED
+  CANCELLED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Protocol {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String
+  logoUrl     String?
+  website     String?
+  twitter     String?
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  missions    Mission[]
+  admins      ProtocolAdmin[]
+
+  @@map("protocols")
+}
+
+model ProtocolApplication {
+  id          String                    @id @default(cuid())
+  userId      String
+  user        User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  website     String
+  twitter     String?
+  status      ProtocolApplicationStatus @default(PENDING)
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
+
+  @@map("protocol_applications")
+  @@index([status])
+}
+
+model ProtocolAdmin {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  protocolId String
+  protocol   Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@map("protocol_admins")
+}
+
+model Mission {
+  id                String            @id @default(cuid())
+  title             String
+  description       String
+  requirements      String
+  category          ArchetypeClass
+  difficulty        MissionDifficulty @default(BEGINNER)
+  reputationReward  Int
+  rewardUsdc        String?
+  minReputation     Int               @default(0)
+  minStreak         Int               @default(0)
+  deadline          DateTime?
+  status            MissionStatus     @default(DRAFT)
+  escrowStatus      EscrowStatus      @default(NONE)
+  erc8183JobId      String?
+  deliverableHash   String?
+  protocolId        String
+  protocol          Protocol          @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  submissions       Submission[]
+  payouts           Payout[]
+  milestones        MissionMilestone[]
+
+  @@map("missions")
+  @@index([status, createdAt(sort: Desc)])
+  @@index([protocolId, status])
+  @@index([category, status])
+}
+
+model Submission {
+  id            String           @id @default(cuid())
+  missionId     String
+  mission       Mission          @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String?
+  links         String?
+  evidence      String
+  status        SubmissionStatus @default(PENDING)
+  rewardGranted Int?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  review        Review?
+
+  @@map("submissions")
+  @@index([missionId, status])
+  @@index([userId, status])
+}
+
+model Review {
+  id           String     @id @default(cuid())
+  submissionId String     @unique
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  reviewerId   String
+  reviewer     User       @relation("ReviewerReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
+  feedback     String?
+  qualityScore Int        @default(0)
+  impactScore  Int        @default(0)
+  createdAt    DateTime   @default(now())
+
+  @@map("reviews")
+}
+
+model BadgeDefinition {
+  id              String      @id @default(cuid())
+  name            String      @unique
+  description     String
+  icon            String?
+  contractAddress String?
+  tokenId         Int?
+  userBadges      UserBadge[]
+
+  @@map("badge_definitions")
+}
+
+model UserBadge {
+  id        String          @id @default(cuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId   String
+  badge     BadgeDefinition @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  awardedAt DateTime        @default(now())
+
+  @@map("user_badges")
+  @@unique([userId, badgeId])
+}
+
+model OnChainProof {
+  id              String   @id @default(cuid())
+  entityType      String
+  entityId        String
+  proofType       String
+  transactionHash String
+  attestationId   String?
+  chainId         Int      @default(5042002)
+  createdAt       DateTime @default(now())
+
+  @@map("on_chain_proofs")
+  @@index([entityType, entityId])
+}
+
+model ReputationEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Int
+  category    String?
+  description String
+  createdAt   DateTime @default(now())
+
+  @@map("reputation_events")
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model Payout {
+  id               String          @id @default(cuid())
+  missionId        String
+  mission          Mission         @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestoneClaimId String?         @unique
+  milestoneClaim   MilestoneClaim? @relation(fields: [milestoneClaimId], references: [id], onDelete: SetNull)
+  amount           String
+  txHash           String?
+  status           PayoutStatus    @default(PENDING)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@map("payouts")
+  @@index([userId, status])
+  @@index([missionId])
+}
+
+model MissionMilestone {
+  id               String           @id @default(cuid())
+  missionId        String
+  mission          Mission          @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  sortOrder        Int              @default(0)
+  title            String
+  description      String?
+  reputationReward Int              @default(0)
+  rewardUsdc       String?
+  claims           MilestoneClaim[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("mission_milestones")
+  @@index([missionId, sortOrder])
+}
+
+enum MilestoneClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model MilestoneClaim {
+  id           String               @id @default(cuid())
+  milestoneId  String
+  milestone    MissionMilestone     @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User                 @relation("MilestoneClaimUser", fields: [userId], references: [id], onDelete: Cascade)
+  evidence     String
+  status       MilestoneClaimStatus @default(PENDING)
+  reviewerId   String?
+  reviewer     User?                @relation("MilestoneClaimReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  payout       Payout?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@map("milestone_claims")
+  @@unique([milestoneId, userId])
+  @@index([status, createdAt])
+}
+
+model WalletLedger {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  amount    String?
+  txHash    String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@map("wallet_ledger")
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model ActivitySnapshot {
+  id               String   @id @default(cuid())
+  dateKey          String   @unique
+  merkleRoot       String?
+  participantCount Int      @default(0)
+  totalPoints      Int      @default(0)
+  publishedTxHash  String?
+  createdAt        DateTime @default(now())
+
+  @@map("activity_snapshots")
+  @@index([dateKey])
+}

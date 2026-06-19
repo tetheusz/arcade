@@ -1,0 +1,25 @@
+{
+  "registry": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "root": "0x3b25402ef5b8c25f1d40c8b09c39875dc61b7533112245dea95d927edfe1c972",
+  "publishedBy": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "publishBlock": 6,
+  "claims": [
+    {
+      "player": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "profileSlug": "builder-br-1",
+      "status": "claimed",
+      "proof": [
+        "0xb1b93e3644df07cdb5e4154719b2e07e699bb9331bc827d763ccf07b9a5ba068"
+      ]
+    },
+    {
+      "player": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "profileSlug": "security-hunter",
+      "status": "claimed",
+      "proof": [
+        "0x9de3c845afa2ac37760bf50b2d75283b85b21491cab80cff2fda4f93b15225a2"
+      ]
+    }
+  ]
+}

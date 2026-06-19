@@ -1,0 +1,509 @@
+/* Spacing system — tokens e ritmo vertical consistente em todo o Arcade */
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --card-padding: 24px;
+  --card-gap: 16px;
+  --card-gap-tight: 10px;
+  --section-gap: 40px;
+}
+
+/* Shell e stacks */
+
+.shell {
+  padding: 32px 0 80px;
+}
+
+.stack-xl {
+  gap: var(--section-gap);
+}
+
+.stack-lg {
+  gap: 28px;
+}
+
+.stack-md {
+  gap: var(--space-5);
+}
+
+.stack-sm {
+  gap: var(--space-3);
+}
+
+.stack-xs {
+  gap: var(--space-2);
+}
+
+/* Header */
+
+.site-header {
+  padding: 12px 20px;
+  gap: var(--space-4);
+  min-height: 68px;
+}
+
+.shell--hub .site-header {
+  padding: 12px 20px;
+}
+
+.site-nav {
+  gap: var(--space-1);
+}
+
+.header-actions {
+  gap: var(--space-2);
+}
+
+.brand-copy {
+  gap: 3px;
+}
+
+/* Cards — padding e grid interno unificados */
+
+.proof-card,
+.dashboard-card,
+.leaderboard-panel,
+.section-card,
+.player-card,
+.login-card,
+.challenge-card,
+.archive-card,
+.source-card,
+.game-stage,
+.hub-metric,
+.hub-portal {
+  padding: var(--card-padding);
+}
+
+.proof-card,
+.dashboard-card,
+.leaderboard-panel,
+.section-card,
+.player-card,
+.bounty-card,
+.challenge-card,
+.archive-card,
+.hub-portal {
+  display: grid;
+  gap: var(--card-gap);
+  align-content: start;
+}
+
+.panel-header {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.panel-label,
+.eyebrow {
+  margin: 0;
+}
+
+.proof-card strong {
+  margin: 0;
+  line-height: 1;
+}
+
+.proof-card .panel-label + strong {
+  margin-top: var(--space-1);
+}
+
+.section-card h2,
+.leaderboard-panel h2,
+.player-card h2,
+.challenge-card h3,
+.archive-card h3,
+.bounty-card h2 {
+  margin: 0;
+  line-height: 1.15;
+}
+
+.section-heading--stacked {
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.section-heading--stacked p,
+.section-heading--stacked h2 {
+  margin: 0;
+}
+
+.section-card p,
+.player-card p,
+.leaderboard-panel p {
+  margin: 0;
+}
+
+/* App hero */
+
+.app-hero {
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.app-hero__copy {
+  gap: var(--space-3);
+}
+
+.app-hero__side {
+  gap: var(--space-3);
+}
+
+.app-hero__side:has(.button) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+/* Leaderboard */
+
+.leaderboard-columns {
+  gap: var(--space-5);
+}
+
+.leaderboard-panel {
+  gap: var(--card-gap);
+}
+
+.leaderboard-list {
+  gap: var(--space-3);
+}
+
+.leaderboard-row {
+  padding: var(--space-4) var(--space-5);
+  gap: var(--space-4);
+}
+
+.leaderboard-panel .empty-state {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+}
+
+.leaderboard-panel .empty-state p {
+  margin: 0;
+}
+
+/* Activity & listas */
+
+.activity-list {
+  gap: var(--space-3);
+}
+
+.activity-row {
+  padding: var(--space-4) var(--space-5);
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+}
+
+.activity-row strong,
+.activity-row span {
+  margin: 0;
+}
+
+/* Product sections (perfil, etc.) */
+
+.product-sections {
+  gap: var(--space-5);
+}
+
+.profile-grid {
+  gap: var(--space-4);
+}
+
+.profile-hero {
+  gap: var(--space-4);
+}
+
+/* Empty states */
+
+.empty-state {
+  padding: var(--space-4) var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.section-card.section-card--empty,
+.empty-state.section-card {
+  gap: var(--space-4);
+}
+
+/* Feature list */
+
+.feature-list {
+  gap: var(--space-4);
+}
+
+.feature-item {
+  padding-top: var(--space-4);
+  gap: var(--space-1);
+}
+
+.feature-item:first-child {
+  padding-top: 0;
+}
+
+/* Dashboard grid admin */
+
+.dashboard-grid {
+  gap: var(--space-4);
+}
+
+.dashboard-card {
+  gap: var(--card-gap-tight);
+}
+
+.dashboard-card strong {
+  margin: 0;
+  line-height: 1;
+}
+
+/* Wallet */
+
+.wallet-card .wallet-details {
+  gap: var(--space-4);
+}
+
+.wallet-row {
+  padding: var(--space-1) 0;
+}
+
+.wallet-actions {
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+/* Bounties */
+
+.bounty-grid {
+  gap: var(--space-5);
+}
+
+.bounty-card {
+  gap: var(--card-gap-tight);
+}
+
+.bounty-card p {
+  margin: 0;
+}
+
+/* Hub landing */
+
+.hub-hero {
+  padding: 128px 0 72px;
+}
+
+.hub-hero__content {
+  gap: 40px;
+  align-items: start;
+}
+
+.hub-hero__copy {
+  max-width: 760px;
+}
+
+.hub-hero__copy h1 {
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.hub-hero__actions {
+  margin-top: var(--space-6);
+  gap: var(--space-3);
+}
+
+.hub-hero__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.hub-metric {
+  padding: var(--space-5) var(--space-6);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.hub-metric strong {
+  margin: 0;
+  line-height: 1;
+}
+
+.hub-metric span {
+  margin: 0;
+}
+
+.hub-portals {
+  padding: var(--space-8) 0 var(--space-7);
+}
+
+.hub-portals__intro {
+  margin-bottom: var(--space-6);
+}
+
+.hub-portals__intro h2 {
+  margin: var(--space-2) 0 0;
+}
+
+.hub-portals__grid {
+  gap: var(--space-5);
+}
+
+.hub-portal {
+  min-height: 0;
+  padding: var(--card-padding);
+  gap: var(--space-3);
+}
+
+.hub-portal__copy {
+  flex: none;
+  margin: 0;
+}
+
+.hub-portal__cta {
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.hub-flow {
+  padding: var(--space-6) 0 var(--space-8);
+}
+
+.hub-flow__inner {
+  gap: var(--space-6);
+  padding: var(--space-7);
+}
+
+.hub-teaser__link {
+  padding: var(--space-5) var(--space-6);
+  gap: var(--space-4);
+}
+
+.hub-cta {
+  padding: var(--space-7) var(--space-8);
+  gap: var(--space-6);
+}
+
+/* Footer */
+
+.site-footer {
+  margin-top: var(--space-8);
+  padding: var(--space-7) 0 var(--space-6);
+}
+
+.site-footer__inner {
+  gap: var(--space-6);
+}
+
+/* Archive / posts */
+
+.archive-page {
+  gap: var(--section-gap);
+}
+
+.archive-hero {
+  gap: var(--space-7);
+  padding: var(--space-2) 0 var(--space-4);
+}
+
+.archive-hero__copy {
+  gap: var(--space-3);
+}
+
+.archive-hero__stats {
+  gap: var(--space-4);
+  padding: var(--card-padding);
+}
+
+.archive-hero__stats > div {
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+}
+
+.archive-hero__stats > div:first-child {
+  padding-top: 0;
+}
+
+.archive-hero__stats strong {
+  margin: 0;
+}
+
+/* Auth */
+
+.auth-stage {
+  gap: var(--space-7);
+}
+
+.auth-hero {
+  gap: var(--space-6);
+}
+
+.login-card {
+  gap: var(--card-gap);
+}
+
+/* Admin table */
+
+.posts-table th,
+.posts-table td {
+  padding: var(--space-4) var(--space-5);
+}
+
+.admin-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.row-actions {
+  gap: var(--space-3);
+}
+
+/* Mobile */
+
+@media (max-width: 760px) {
+  .shell {
+    padding: 24px 0 64px;
+  }
+
+  .stack-xl {
+    gap: 32px;
+  }
+
+  .hub-hero {
+    padding-top: 112px;
+    padding-bottom: 48px;
+  }
+
+  .hub-hero__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .activity-row {
+    padding: var(--space-4);
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .leaderboard-row {
+    padding: var(--space-4);
+  }
+
+  .hub-cta {
+    padding: var(--space-6) var(--space-5);
+  }
+}

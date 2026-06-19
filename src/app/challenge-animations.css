@@ -1,0 +1,247 @@
+/* Termo + Conexo — animações de jogo */
+
+.termo-board {
+  perspective: 900px;
+}
+
+.word-row--shake {
+  animation: termo-row-shake 0.45s ease;
+}
+
+.word-cell {
+  transform-style: preserve-3d;
+  transition:
+    transform 0.12s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.word-cell--active:not(:empty) {
+  animation: termo-letter-pop 0.14s ease;
+  border-color: rgba(0, 82, 255, 0.45);
+  box-shadow: 0 0 0 2px rgba(0, 82, 255, 0.12);
+}
+
+.word-cell--flip.word-cell--correct,
+.word-cell--flip.word-cell--present,
+.word-cell--flip.word-cell--absent {
+  animation: termo-cell-flip 0.55s ease forwards;
+  animation-delay: calc(var(--cell-index, 0) * 110ms);
+}
+
+.word-cell--correct {
+  animation: termo-cell-glow 0.35s ease;
+}
+
+.termo-key {
+  transition:
+    transform 0.12s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.termo-key:not(:disabled):active {
+  transform: scale(0.94);
+}
+
+.termo-key:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.connection-board {
+  transition: transform 0.2s ease;
+}
+
+.connection-board--shake {
+  animation: conexo-board-shake 0.48s ease;
+}
+
+.connection-tile {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.connection-tile:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.connection-tile--selected {
+  transform: scale(1.04) translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 82, 255, 0.14);
+  border-color: rgba(0, 82, 255, 0.35);
+}
+
+.connection-tile--pulse {
+  animation: conexo-tile-pulse 0.32s ease;
+}
+
+.connection-group {
+  animation: conexo-group-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.connection-group--revealed {
+  background: rgba(0, 82, 255, 0.08);
+  border-color: rgba(0, 82, 255, 0.2);
+}
+
+.challenge-reveal {
+  display: grid;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 82, 255, 0.22);
+  background: linear-gradient(135deg, rgba(0, 82, 255, 0.08), rgba(0, 200, 150, 0.08));
+  animation: challenge-reveal-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.challenge-reveal__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-strong, #0052ff);
+}
+
+.challenge-reveal__answer {
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.challenge-reveal p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+@keyframes termo-letter-pop {
+  0% {
+    transform: scale(0.88);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes termo-cell-flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  45% {
+    transform: rotateX(-90deg);
+  }
+  55% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes termo-cell-glow {
+  0% {
+    box-shadow: 0 0 0 rgba(63, 169, 152, 0);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(63, 169, 152, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(63, 169, 152, 0);
+  }
+}
+
+@keyframes termo-row-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes conexo-board-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes conexo-tile-pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes conexo-group-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes challenge-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-cell--flip,
+  .word-cell--active,
+  .word-row--shake,
+  .connection-board--shake,
+  .connection-tile--pulse,
+  .connection-group,
+  .challenge-reveal {
+    animation: none !important;
+  }
+
+  .connection-tile--selected,
+  .connection-tile:not(:disabled):hover,
+  .termo-key:not(:disabled):hover {
+    transform: none;
+  }
+}

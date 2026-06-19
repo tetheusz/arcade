@@ -1,0 +1,82 @@
+
+> arc-builder-journal@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://26.51.243.210:3000
+- Environments: .env
+✓ Ready in 469ms
+
+ GET /admin/new 307 in 2.3s (next.js: 2.2s, application-code: 94ms)
+ GET /admin/login 200 in 434ms (next.js: 350ms, application-code: 84ms)
+ GET / 200 in 4.3s (next.js: 1963ms, application-code: 2.3s)
+ GET /admin/new 307 in 133ms (next.js: 4ms, application-code: 129ms)
+ GET /admin/login 200 in 47ms (next.js: 4ms, application-code: 44ms)
+ GET / 200 in 270ms (next.js: 12ms, application-code: 258ms)
+ GET / 200 in 455ms (next.js: 3ms, application-code: 452ms)
+ GET / 200 in 1923ms (next.js: 4ms, application-code: 1919ms)
+ GET /posts/bem-vindo-ao-arc-traducao-pt-br 200 in 2.6s (next.js: 1352ms, application-code: 1287ms)
+✓ Compiled in 16ms
+✓ Compiled in 11ms
+✓ Compiled in 8ms
+ GET / 200 in 884ms (next.js: 316ms, application-code: 569ms)
+ GET / 200 in 618ms (next.js: 3ms, application-code: 615ms)
+ GET /posts/bem-vindo-ao-arc-traducao-pt-br 200 in 1055ms (next.js: 178ms, application-code: 877ms)
+ GET / 200 in 1901ms (next.js: 3ms, application-code: 1898ms)
+ GET /posts/bem-vindo-ao-arc-traducao-pt-br 200 in 2.5s (next.js: 7ms, application-code: 2.5s)
+ GET / 200 in 259ms (next.js: 4ms, application-code: 254ms)
+ GET /posts/bem-vindo-ao-arc-traducao-pt-br 200 in 654ms (next.js: 7ms, application-code: 646ms)
+ GET / 200 in 458ms (next.js: 2ms, application-code: 456ms)
+✓ Compiled in 35ms
+ GET / 200 in 940ms (next.js: 281ms, application-code: 659ms)
+ GET /posts 200 in 669ms (next.js: 387ms, application-code: 282ms)
+ GET / 200 in 1930ms (next.js: 9ms, application-code: 1921ms)
+ GET /posts 200 in 1959ms (next.js: 2ms, application-code: 1956ms)
+ GET / 200 in 245ms (next.js: 2ms, application-code: 243ms)
+ GET /posts 200 in 416ms (next.js: 1993µs, application-code: 414ms)
+✓ Compiled in 7ms
+ GET /entrar?next=%2Fjogar 200 in 816ms (next.js: 702ms, application-code: 115ms)
+ GET /ranking 200 in 5.7s (next.js: 628ms, application-code: 5.1s)
+ GET /ranking 200 in 6.2s (next.js: 571ms, application-code: 5.6s)
+ GET /ranking 200 in 1668ms (next.js: 3ms, application-code: 1665ms)
+ GET /entrar?next=%2Fjogar 200 in 90ms (next.js: 6ms, application-code: 84ms)
+ GET /players/arc-admin 200 in 3.8s (next.js: 1040ms, application-code: 2.8s)
+✓ Compiled in 17ms
+✓ Compiled in 9ms
+ GET /entrar?next=%2Fjogar 200 in 681ms (next.js: 167ms, application-code: 514ms)
+ GET /players/arc-admin 200 in 1176ms (next.js: 188ms, application-code: 988ms)
+✓ Compiled in 8ms
+ GET /entrar?next=%2Fjogar 200 in 603ms (next.js: 141ms, application-code: 462ms)
+ GET /players/arc-admin 200 in 3.0s (next.js: 176ms, application-code: 2.8s)
+ GET /entrar?next=%2Fjogar 200 in 54ms (next.js: 3ms, application-code: 51ms)
+ GET /players/arc-admin 200 in 863ms (next.js: 8ms, application-code: 855ms)
+ POST /api/auth/sign-in/email 200 in 2.9s (next.js: 1331ms, application-code: 1554ms)
+ POST /api/auth/sign-in/email 200 in 2.8s (next.js: 6ms, application-code: 2.8s)
+ GET /jogar 200 in 3.0s (next.js: 343ms, application-code: 2.7s)
+ POST /api/auth/sign-in/email 200 in 895ms (next.js: 6ms, application-code: 888ms)
+ GET /jogar 200 in 1946ms (next.js: 2ms, application-code: 1944ms)
+ POST /api/auth/sign-up/email 200 in 1507ms (next.js: 6ms, application-code: 1501ms)
+ GET /jogar 200 in 3.8s (next.js: 4ms, application-code: 3.8s)
+ POST /api/challenges/cmnxngn8v0000vcestaddd1p0/submit 200 in 4.8s (next.js: 1032ms, application-code: 3.8s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.1s (next.js: 6ms, application-code: 2.1s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+ POST /api/challenges/cmnxngnqb0002vcesr7a8t1up/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+✓ Compiled in 11ms
+ GET / 200 in 2.2s (next.js: 160ms, application-code: 2.1s)
+ POST /api/auth/sign-up/email 403 in 138ms (next.js: 120ms, application-code: 18ms)
+ POST /api/auth/sign-up/email 200 in 1934ms (next.js: 6ms, application-code: 1929ms)
+ GET /jogar 200 in 5.4s (next.js: 143ms, application-code: 5.2s)
+ POST /api/challenges/cmnxngn8v0000vcestaddd1p0/submit 200 in 3.7s (next.js: 28ms, application-code: 3.7s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.3s (next.js: 6ms, application-code: 2.3s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.3s (next.js: 6ms, application-code: 2.3s)
+ POST /api/challenges/cmnxngnqb0002vcesr7a8t1up/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+ POST /api/auth/sign-up/email 200 in 1103ms (next.js: 6ms, application-code: 1097ms)
+ GET /jogar 200 in 3.0s (next.js: 2ms, application-code: 3.0s)
+ POST /api/challenges/cmnxngn8v0000vcestaddd1p0/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.3s (next.js: 6ms, application-code: 2.3s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.1s (next.js: 6ms, application-code: 2.1s)
+ POST /api/challenges/cmnxngnkj0001vceshl9qabm8/submit 200 in 2.3s (next.js: 6ms, application-code: 2.3s)
+ POST /api/challenges/cmnxngnqb0002vcesr7a8t1up/submit 200 in 2.5s (next.js: 6ms, application-code: 2.5s)
