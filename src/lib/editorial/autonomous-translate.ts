@@ -3,6 +3,11 @@ import {
   selectNextArcDocCandidate,
   type ArcDocCandidate,
 } from "@/lib/editorial/arc-docs-source";
+import { getEditorialModelLabel, getEditorialProvider } from "@/lib/editorial/provider";
+import {
+  saveAgentTranslationDraft,
+  type AgentTranslationInput,
+} from "@/lib/editorial/save-agent-content";
 import {
   fetchArcDocMarkdown,
   translateArcDocMarkdown,
@@ -15,12 +20,21 @@ export type AutonomousTranslationResult =
       post: {
         slug: string;
         title: string;
-        status: "DRAFT";
+        status: "DRAFT" | "PUBLISHED";
         kind: "TRANSLATION";
       };
       fetchedUrl: string;
       truncated: boolean;
       model: string;
+    }
+  | {
+      status: "ready-for-agent";
+      candidate: ArcDocCandidate;
+      fetchedUrl: string;
+      truncated: boolean;
+      model: string;
+      sourceMarkdown: string;
+      message: string;
     }
   | {
       status: "preview";
@@ -81,7 +95,11 @@ function deriveTags(candidate: ArcDocCandidate) {
 
 export async function runAutonomousTranslation(
   prisma: PrismaClient,
-  options?: { dryRun?: boolean; forceSlug?: string },
+  options?: {
+    dryRun?: boolean;
+    forceSlug?: string;
+    agentTranslation?: AgentTranslationInput;
+  },
 ): Promise<AutonomousTranslationResult> {
   const candidate = await selectNextArcDocCandidate(prisma, {
     forceSlug: options?.forceSlug,
@@ -94,13 +112,53 @@ export async function runAutonomousTranslation(
     };
   }
 
+  const provider = getEditorialProvider();
+  const model = getEditorialModelLabel();
+
   try {
     const fetched = await fetchArcDocMarkdown(candidate.sourceUrl);
-    const translated = await translateArcDocMarkdown({
-      markdown: fetched.markdown,
-      sourceUrl: candidate.sourceUrl,
-      sourceTitle: candidate.sourceTitle,
-    });
+
+    if (provider === "cursor-agent" && !options?.agentTranslation) {
+      if (options?.dryRun) {
+        return {
+          status: "preview",
+          candidate,
+          fetchedUrl: fetched.fetchedUrl,
+          truncated: fetched.truncated,
+          model,
+          generated: {
+            title: `[Cursor Agent] ${candidate.title}`,
+            summary: candidate.notes,
+            contentPreview: fetched.markdown.slice(0, 1200),
+          },
+        };
+      }
+
+      return {
+        status: "ready-for-agent",
+        candidate,
+        fetchedUrl: fetched.fetchedUrl,
+        truncated: fetched.truncated,
+        model,
+        sourceMarkdown: fetched.markdown,
+        message:
+          "Fonte baixada. O agente Cursor (Composer) deve traduzir e chamar save-agent-content.",
+      };
+    }
+
+    const translated =
+      provider === "cursor-agent" && options?.agentTranslation
+        ? {
+            titlePt: options.agentTranslation.title,
+            summaryPt: options.agentTranslation.summary,
+            contentMd: options.agentTranslation.content,
+            model,
+          }
+        : await translateArcDocMarkdown({
+            markdown: fetched.markdown,
+            sourceUrl: candidate.sourceUrl,
+            sourceTitle: candidate.sourceTitle,
+          });
 
     if (options?.dryRun) {
       return {
@@ -117,42 +175,43 @@ export async function runAutonomousTranslation(
       };
     }
 
-    const savedPost = await prisma.post.upsert({
-      where: {
-        slug: candidate.slug,
-      },
-      update: {
-        title: translated.titlePt,
-        summary: translated.summaryPt,
-        content: translated.contentMd,
-        kind: "TRANSLATION",
-        coverImageUrl: guessCoverImage(candidate),
-        sourceTitle: candidate.sourceTitle,
-        sourceUrl: candidate.sourceUrl,
-        tags: deriveTags(candidate).join(","),
-        status: "DRAFT",
-        publishedAt: null,
-      },
-      create: {
-        slug: candidate.slug,
-        title: translated.titlePt,
-        summary: translated.summaryPt,
-        content: translated.contentMd,
-        kind: "TRANSLATION",
-        coverImageUrl: guessCoverImage(candidate),
-        sourceTitle: candidate.sourceTitle,
-        sourceUrl: candidate.sourceUrl,
-        tags: deriveTags(candidate).join(","),
-        status: "DRAFT",
-        publishedAt: null,
-      },
-      select: {
-        slug: true,
-        title: true,
-        status: true,
-        kind: true,
-      },
-    });
+    const savedPost =
+      provider === "cursor-agent" && options?.agentTranslation
+        ? await saveAgentTranslationDraft(prisma, candidate, options.agentTranslation)
+        : await prisma.post.upsert({
+            where: { slug: candidate.slug },
+            update: {
+              title: translated.titlePt,
+              summary: translated.summaryPt,
+              content: translated.contentMd,
+              kind: "TRANSLATION",
+              coverImageUrl: guessCoverImage(candidate),
+              sourceTitle: candidate.sourceTitle,
+              sourceUrl: candidate.sourceUrl,
+              tags: [...deriveTags(candidate), "openai"].join(","),
+              status: "DRAFT",
+              publishedAt: null,
+            },
+            create: {
+              slug: candidate.slug,
+              title: translated.titlePt,
+              summary: translated.summaryPt,
+              content: translated.contentMd,
+              kind: "TRANSLATION",
+              coverImageUrl: guessCoverImage(candidate),
+              sourceTitle: candidate.sourceTitle,
+              sourceUrl: candidate.sourceUrl,
+              tags: [...deriveTags(candidate), "openai"].join(","),
+              status: "DRAFT",
+              publishedAt: null,
+            },
+            select: {
+              slug: true,
+              title: true,
+              status: true,
+              kind: true,
+            },
+          });
 
     return {
       status: "draft-saved",
@@ -160,7 +219,7 @@ export async function runAutonomousTranslation(
       post: {
         slug: savedPost.slug,
         title: savedPost.title,
-        status: "DRAFT",
+        status: savedPost.status,
         kind: "TRANSLATION",
       },
       fetchedUrl: fetched.fetchedUrl,

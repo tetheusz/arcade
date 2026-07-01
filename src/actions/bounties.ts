@@ -320,33 +320,92 @@ export async function reviewSubmissionAction(
     if (data.status === "APPROVED") {
       const mission = submission.mission;
 
-      if (mission.erc8183JobId && mission.rewardUsdc) {
-        const deliverableContent = `${submission.title ?? ""}:${submission.evidence}`;
-        await submitEscrowDeliverable(mission.erc8183JobId, deliverableContent);
-        const complete = await completeEscrowJob(mission.erc8183JobId);
+      if (mission.rewardUsdc) {
+        const profile = await prisma.userProfile.findUnique({
+          where: { userId: submission.userId },
+          select: { walletAddress: true, usdcEarned: true },
+        });
 
-        if (complete.success) {
-          await prisma.$transaction([
-            prisma.mission.update({
-              where: { id: mission.id },
-              data: { escrowStatus: "COMPLETED", deliverableHash: hashDeliverable(deliverableContent) },
-            }),
-            prisma.payout.create({
-              data: {
-                missionId: mission.id,
-                userId: submission.userId,
-                amount: mission.rewardUsdc,
-                txHash: complete.txHash,
-                status: "COMPLETED",
-              },
-            }),
-            prisma.userProfile.update({
+        const walletAddress = profile?.walletAddress;
+        let payoutTxHash: string | null = null;
+        let payoutStatus: "COMPLETED" | "PENDING" = "PENDING";
+
+        if (!walletAddress) {
+          return actionError(
+            "Usuário não tem carteira ativa no perfil. Peça para provisionar a wallet antes de aprovar USDC.",
+          );
+        }
+
+        const transfer = await transferUsdcToAddress(walletAddress, mission.rewardUsdc);
+
+        if (transfer.success) {
+          payoutTxHash = transfer.txHash;
+          payoutStatus = "COMPLETED";
+        } else {
+          const { adminWalletClient } = await import("@/lib/onchain");
+
+          if (adminWalletClient) {
+            return actionError(
+              `Pagamento USDC falhou: ${transfer.error}. Verifique saldo USDC da carteira admin e tente de novo.`,
+            );
+          }
+        }
+
+        await prisma.$transaction(async (tx) => {
+          const payout = await tx.payout.create({
+            data: {
+              missionId: mission.id,
+              userId: submission.userId,
+              amount: mission.rewardUsdc!,
+              txHash: payoutTxHash,
+              status: payoutStatus,
+            },
+          });
+
+          if (payoutStatus === "COMPLETED") {
+            const current = Number(profile?.usdcEarned ?? 0);
+            const earned = Number.isFinite(current)
+              ? current + Number(mission.rewardUsdc)
+              : Number(mission.rewardUsdc);
+
+            await tx.userProfile.update({
               where: { userId: submission.userId },
+              data: { usdcEarned: earned.toFixed(2) },
+            });
+
+            await tx.walletLedger.create({
               data: {
-                usdcEarned: mission.rewardUsdc,
+                userId: submission.userId,
+                type: "BOUNTY_PAYOUT",
+                amount: mission.rewardUsdc!,
+                txHash: payoutTxHash,
+                metadata: {
+                  missionId: mission.id,
+                  submissionId: submission.id,
+                  payoutId: payout.id,
+                },
               },
-            }),
-          ]);
+            });
+          }
+        });
+
+        if (
+          mission.erc8183JobId &&
+          mission.escrowStatus === "FUNDED"
+        ) {
+          const deliverableContent = `${submission.title ?? ""}:${submission.evidence}`;
+          await submitEscrowDeliverable(mission.erc8183JobId, deliverableContent);
+          const complete = await completeEscrowJob(mission.erc8183JobId);
+
+          if (complete.success) {
+            await prisma.mission.update({
+              where: { id: mission.id },
+              data: {
+                escrowStatus: "COMPLETED",
+                deliverableHash: hashDeliverable(deliverableContent),
+              },
+            });
+          }
         }
       }
 

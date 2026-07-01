@@ -1,9 +1,14 @@
-import type { ChallengeCategory, Prisma, PrismaClient } from "@prisma/client";
+import type { ChallengeCategory, ChallengeStatus, PrismaClient } from "@prisma/client";
 import {
   generateDailyChallenges,
   selectChallengeTheme,
 } from "@/lib/editorial/generate-challenges";
-import { normalizeAnswer, getDateKey, shiftDateKey } from "@/lib/utils";
+import { getEditorialModelLabel, getEditorialProvider } from "@/lib/editorial/provider";
+import {
+  saveAgentChallenges,
+  type AgentChallengeInput,
+} from "@/lib/editorial/save-agent-content";
+import { getDateKey, shiftDateKey } from "@/lib/utils";
 
 const RECENT_DRAFT_WINDOW_MS = 23 * 60 * 60 * 1000;
 const ALL_CATEGORIES: ChallengeCategory[] = ["WORD", "CONNECTION", "SECURITY"];
@@ -18,8 +23,18 @@ export type AutonomousChallengeResult =
         id: string;
         category: ChallengeCategory;
         title: string;
-        status: "DRAFT";
+        status: ChallengeStatus;
       }>;
+    }
+  | {
+      status: "ready-for-agent";
+      dateKey: string;
+      themeId: string;
+      themeTitle: string;
+      themeTopic: string;
+      model: string;
+      missingCategories: ChallengeCategory[];
+      message: string;
     }
   | {
       status: "preview";
@@ -47,7 +62,7 @@ export type AutonomousChallengeResult =
 async function getUsedAutoThemeIds(prisma: PrismaClient) {
   const autoChallenges = await prisma.dailyChallenge.findMany({
     where: {
-      sourceLabel: "auto-generated",
+      sourceLabel: { in: ["auto-generated", "cursor-agent"] },
     },
     select: {
       hint: true,
@@ -107,7 +122,8 @@ async function getMissingCategories(
   const cutoff = Date.now() - RECENT_DRAFT_WINDOW_MS;
   const recentAutoDraft = existing.some(
     (entry) =>
-      entry.sourceLabel === "auto-generated" && entry.updatedAt.getTime() >= cutoff,
+      (entry.sourceLabel === "auto-generated" || entry.sourceLabel === "cursor-agent") &&
+      entry.updatedAt.getTime() >= cutoff,
   );
 
   if (recentAutoDraft) {
@@ -123,6 +139,8 @@ export async function runAutonomousChallengeGeneration(
     dryRun?: boolean;
     forceDateKey?: string;
     forceCategories?: ChallengeCategory[];
+    agentChallenges?: AgentChallengeInput[];
+    publish?: boolean;
   },
 ): Promise<AutonomousChallengeResult> {
   const dateKey = await resolveTargetDateKey(prisma, options?.forceDateKey);
@@ -150,7 +168,60 @@ export async function runAutonomousChallengeGeneration(
     };
   }
 
+  const provider = getEditorialProvider();
+  const model = getEditorialModelLabel();
+
+  if (provider === "cursor-agent" && !options?.agentChallenges) {
+    if (options?.dryRun) {
+      return {
+        status: "preview",
+        dateKey,
+        themeId: theme.id,
+        model,
+        challenges: missingCategories.map((category) => ({
+          category,
+          title: `[Cursor Agent] ${theme.title}`,
+          answer: "pending",
+        })),
+      };
+    }
+
+    return {
+      status: "ready-for-agent",
+      dateKey,
+      themeId: theme.id,
+      themeTitle: theme.title,
+      themeTopic: theme.topic,
+      model,
+      missingCategories,
+      message:
+        "Tema selecionado. O agente Cursor (Composer) deve gerar os desafios e salvar via save-agent-content.",
+    };
+  }
+
   try {
+    if (provider === "cursor-agent" && options?.agentChallenges) {
+      const saved = await saveAgentChallenges(
+        prisma,
+        dateKey,
+        options.agentChallenges,
+        { themeId: theme.id, publish: options.publish },
+      );
+
+      return {
+        status: "draft-saved",
+        dateKey,
+        themeId: theme.id,
+        model,
+        saved: saved.map((entry) => ({
+          id: entry.id,
+          category: entry.category,
+          title: entry.title,
+          status: entry.status,
+        })),
+      };
+    }
+
     const generated = await generateDailyChallenges({
       dateKey,
       theme,
@@ -174,59 +245,34 @@ export async function runAutonomousChallengeGeneration(
     const saved = [];
 
     for (const challenge of generated.challenges) {
-      const record = await prisma.dailyChallenge.upsert({
-        where: {
-          dateKey_category: {
-            dateKey,
-            category: challenge.category,
-          },
-        },
-        update: {
-          title: challenge.title,
-          teaser: challenge.teaser,
-          prompt: challenge.prompt,
-          instructions: challenge.instructions,
-          answer: challenge.answer,
-          answerNormalized: normalizeAnswer(challenge.answer),
-          explanation: challenge.explanation,
-          hint: `theme:${theme.id}`,
-          difficulty: challenge.difficulty,
-          basePoints: challenge.basePoints,
-          sourceLabel: "auto-generated",
-          status: "DRAFT",
-          payload: challenge.payload as Prisma.InputJsonValue,
-        },
-        create: {
-          dateKey,
+      const records = await saveAgentChallenges(prisma, dateKey, [
+        {
           category: challenge.category,
           title: challenge.title,
           teaser: challenge.teaser,
           prompt: challenge.prompt,
           instructions: challenge.instructions,
           answer: challenge.answer,
-          answerNormalized: normalizeAnswer(challenge.answer),
           explanation: challenge.explanation,
-          hint: `theme:${theme.id}`,
+          hint: challenge.hint,
           difficulty: challenge.difficulty,
           basePoints: challenge.basePoints,
-          sourceLabel: "auto-generated",
-          status: "DRAFT",
-          payload: challenge.payload as Prisma.InputJsonValue,
+          payload: challenge.payload,
         },
-        select: {
-          id: true,
-          category: true,
-          title: true,
-          status: true,
-        },
-      });
+      ], { themeId: theme.id, publish: false });
 
-      saved.push({
-        id: record.id,
-        category: record.category,
-        title: record.title,
-        status: "DRAFT" as const,
-      });
+      for (const record of records) {
+        await prisma.dailyChallenge.update({
+          where: { id: record.id },
+          data: { sourceLabel: "auto-generated" },
+        });
+        saved.push({
+          id: record.id,
+          category: record.category,
+          title: record.title,
+          status: "DRAFT" as const,
+        });
+      }
     }
 
     return {

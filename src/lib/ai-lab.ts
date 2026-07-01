@@ -6,15 +6,9 @@ export const aiLabStatus = {
   generator: hasOpenAIKey ? "openai-configured" : "not-connected",
   validation: "manual-review",
   note: hasOpenAIKey
-    ? "OpenAI configurado. O cron editorial (24h) traduz docs Arc e gera desafios diarios como rascunhos para revisao no admin."
-    : "Configure OPENAI_API_KEY para traducoes e desafios automaticos do hub Arc.",
+    ? "OpenAI disponivel (EDITORIAL_PROVIDER=openai). Padrao do projeto: cursor-agent no chat."
+    : "Modo cursor-agent: traducoes e desafios gerados pelo Composer/Cursor no chat.",
   capabilities: hasOpenAIKey
-    ? [
-        "arc-doc-translation",
-        "daily-challenge-generation",
-        "draft-generation",
-        "editorial-review",
-        "manual-approval",
-      ]
-    : ["manual-curation", "admin-review"],
+    ? ["openai-provider", "cursor-agent", "arc-doc-translation", "daily-challenge-generation"]
+    : ["cursor-agent", "arc-doc-translation", "daily-challenge-generation", "manual-approval"],
 };

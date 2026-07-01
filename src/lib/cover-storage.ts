@@ -69,6 +69,14 @@ function getSupabasePublicPrefix(bucket: string) {
   return `${url}/storage/v1/object/public/${bucket}/`;
 }
 
+function isReadOnlyDeployEnvironment() {
+  return Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+}
+
+function isDynamicallyUploadedLocalFile(fileName: string) {
+  return /^\d+-[0-9a-f-]{36}\.[a-z0-9]+$/i.test(fileName);
+}
+
 async function uploadImageFile(file: File, target: UploadTarget) {
   validateImageFile(file, target.label);
 
@@ -103,6 +111,12 @@ async function uploadImageFile(file: File, target: UploadTarget) {
     return data.publicUrl;
   }
 
+  if (isReadOnlyDeployEnvironment()) {
+    throw new Error(
+      "Upload de imagem indisponivel em producao sem Supabase Storage. Configure SUPABASE_SERVICE_ROLE_KEY e SUPABASE_STORAGE_BUCKET na Vercel, ou informe uma URL externa da capa.",
+    );
+  }
+
   await mkdir(target.localDir, { recursive: true });
   await writeFile(path.join(target.localDir, fileName), bytes);
 
@@ -113,7 +127,11 @@ async function removeManagedImage(url: string, localPrefix: string, storageFolde
   if (url.startsWith(localPrefix)) {
     const fileName = url.slice(localPrefix.length);
 
-    if (!fileName) {
+    if (!fileName || !isDynamicallyUploadedLocalFile(fileName)) {
+      return;
+    }
+
+    if (isReadOnlyDeployEnvironment()) {
       return;
     }
 

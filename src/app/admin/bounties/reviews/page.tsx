@@ -89,6 +89,10 @@ export default async function AdminReviewsPage() {
             <p><strong>{sub.title}</strong></p>
             <p>{sub.evidence}</p>
             {sub.links && <p className="muted">{sub.links}</p>}
+            <p className="muted">
+              Recompensa: +{sub.mission.reputationReward} XP
+              {sub.mission.rewardUsdc ? ` · ${sub.mission.rewardUsdc} USDC` : ""}
+            </p>
             <ReviewForm
               submissionId={sub.id}
               defaultReward={sub.mission.reputationReward}
